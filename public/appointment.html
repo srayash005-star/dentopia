@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth bg-slate-950 text-slate-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dentopia — Appointment</title>
+    <meta
+      name="description"
+      content="Book an appointment with Dentopia using our appointment page and see payment instructions."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        font-family: "Inter", system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        background: #020617;
+        color: #f8fafc;
+      }
+      .glass {
+        background: rgba(15, 23, 42, 0.82);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+      }
+      .page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .nav-link {
+        text-decoration: none;
+        color: inherit;
+      }
+      .form-input {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px solid #334155;
+        background: #0f172a;
+        color: #f8fafc;
+        padding: 14px;
+      }
+      .button {
+        border-radius: 9999px;
+        background: #0ea5e9;
+        color: #fff;
+        padding: 14px 20px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      class="glass"
+      style="position: sticky; top: 0; z-index: 50; backdrop-filter: blur(16px)"
+    >
+      <div
+        class="page-container"
+        style="
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 18px 0;
+        "
+      >
+        <div style="display: flex; align-items: center; gap: 14px">
+          <div
+            style="
+              width: 48px;
+              height: 48px;
+              border-radius: 16px;
+              background: #0ea5e9;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.3rem;
+              font-weight: 700;
+              color: #fff;
+            "
+          >
+            D
+          </div>
+          <div>
+            <p style="margin: 0; font-weight: 700">Dentopia</p>
+            <p style="margin: 0; font-size: 0.85rem; color: #94a3b8">
+              Bright smiles, fast care
+            </p>
+          </div>
+        </div>
+        <a
+          href="https://www.facebook.com/dentopiabd"
+          target="_blank"
+          rel="noreferrer"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 10px 14px;
+            font-weight: 700;
+            text-decoration: none;
+          "
+          >f Facebook</a
+        >
+      </div>
+      <div
+        class="page-container"
+        style="
+          display: grid;
+          gap: 12px;
+          grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+          align-items: center;
+          padding-bottom: 18px;
+        "
+      >
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="doctors.html">Doctors</a>
+        <a class="nav-link" href="services.html">Services</a>
+        <a class="nav-link" href="tools.html">Tools</a>
+        <a class="nav-link" href="review.html">Review</a>
+        <a class="nav-link" href="news.html">News</a>
+        <a class="nav-link" href="research.html">Research</a>
+        <a class="nav-link" href="faq.html">FAQ</a>
+        <a class="nav-link" href="appointment.html">Appointment</a>
+      </div>
+    </header>
+
+    <main class="page-container" style="padding-top: 24px">
+      <h1 style="font-size: clamp(2rem, 3vw, 3rem); margin-bottom: 16px">
+        Book your appointment
+      </h1>
+      <p style="max-width: 720px; color: #cbd5e1; margin-bottom: 28px">
+        Please provide your details and preferred appointment date. After
+        payment, send the bKash reference in the message.
+      </p>
+      <div class="glass" style="border-radius: 28px; padding: 24px">
+        <form>
+          <div style="display: grid; gap: 16px">
+            <input
+              class="form-input"
+              type="text"
+              placeholder="Your full name"
+            />
+            <input class="form-input" type="tel" placeholder="Phone number" />
+            <input class="form-input" type="date" />
+            <select class="form-input">
+              <option>General Checkup</option>
+              <option>Cleaning</option>
+              <option>Root Canal</option>
+              <option>Braces / Aligners</option>
+              <option>Cosmetic Treatment</option>
+            </select>
+            <textarea
+              class="form-input"
+              rows="4"
+              placeholder="Your message, symptoms, or bKash reference"
+            ></textarea>
+            <button class="button" type="button">Submit Appointment</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

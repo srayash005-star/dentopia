@@ -1,12 +1,1055 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth bg-slate-950 text-slate-100">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dentopia</title>
+    <meta
+      name="description"
+      content="Dentopia — fast, mobile-first dental care in Bangladesh. Book appointments, pay with bKash, and chat via WhatsApp."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"
+      defer
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.2.0/dist/supabase.min.js"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Inter", system-ui, sans-serif;
+      }
+      body {
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(59, 130, 246, 0.18),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(14, 165, 233, 0.16),
+            transparent 25%
+          ),
+          #020617;
+      }
+      [x-cloak] {
+        display: none !important;
+      }
+      .glass {
+        background: rgba(15, 23, 42, 0.72);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+      }
+      .floating-btn {
+        box-shadow: 0 18px 50px rgba(14, 165, 233, 0.14);
+      }
+    </style>
   </head>
-  <body>
-    <h1>Welcome to Dentopia</h1>
-    <script src="../src/index.js"></script>
+  <body x-data="clinicApp()" class="min-h-screen pb-24">
+    <header
+      class="sticky top-0 z-50 border-b border-slate-200/80 bg-white text-slate-900 shadow-sm"
+    >
+      <div
+        class="mx-auto flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8"
+      >
+        <div class="hidden sm:flex flex-wrap items-center gap-4">
+          <a
+            href="index.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Home</a
+          >
+          <a
+            href="doctors.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Doctors</a
+          >
+          <a
+            href="services.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Services</a
+          >
+          <a
+            href="tools.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Tools</a
+          >
+          <a
+            href="review.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Review</a
+          >
+          <a
+            href="news.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >News</a
+          >
+          <a
+            href="research.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Research</a
+          >
+          <a
+            href="faq.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >FAQ</a
+          >
+          <a
+            href="appointment.html"
+            class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Appointment</a
+          >
+        </div>
+
+        <button
+          @click="menuOpen = !menuOpen"
+          class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 sm:hidden"
+        >
+          Menu
+          <span x-text="menuOpen ? '✕' : '☰'"></span>
+        </button>
+
+        <div
+          class="flex flex-wrap items-center gap-3 rounded-3xl bg-slate-950 px-4 py-3 text-sm text-white shadow-lg shadow-slate-950/10 sm:bg-white sm:text-slate-900 sm:shadow-none"
+        >
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500 text-xl font-bold text-white"
+          >
+            D
+          </div>
+          <div class="min-w-0">
+            <p class="font-semibold text-white sm:text-slate-900">Dentopia</p>
+            <p class="text-xs text-slate-200 sm:text-slate-500">
+              Bright smiles, fast care
+            </p>
+          </div>
+          <a
+            href="https://www.facebook.com/dentopiabd"
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-900 transition hover:bg-slate-200"
+          >
+            <span aria-hidden="true">f</span>
+            Facebook
+          </a>
+        </div>
+      </div>
+      <div
+        x-show="menuOpen"
+        x-cloak
+        class="border-t border-slate-200 bg-white px-4 py-4 sm:hidden"
+      >
+        <div class="space-y-3">
+          <a
+            href="index.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Home</a
+          >
+          <a
+            href="doctors.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Doctors</a
+          >
+          <a
+            href="services.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Services</a
+          >
+          <a
+            href="tools.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Tools</a
+          >
+          <a
+            href="review.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Review</a
+          >
+          <a
+            href="news.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >News</a
+          >
+          <a
+            href="research.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Research</a
+          >
+          <a
+            href="faq.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >FAQ</a
+          >
+          <a
+            href="appointment.html"
+            class="block text-sm font-semibold uppercase tracking-[0.24em] text-slate-900"
+            >Appointment</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+      <header
+        class="flex flex-col gap-6 border-b border-slate-700 pb-6 md:flex-row md:items-center md:justify-between"
+      >
+        <div>
+          <div
+            class="inline-flex items-center gap-3 rounded-3xl bg-slate-900 px-4 py-2 text-sm font-semibold text-sky-300 ring-1 ring-sky-500/20"
+          >
+            <span class="h-2.5 w-2.5 rounded-full bg-sky-400"></span>
+            Dentopia
+          </div>
+          <p class="mt-4 max-w-2xl text-slate-400">
+            Bangladesh dental care with appointment booking, bKash payment
+            instructions, and a fast mobile-first experience.
+          </p>
+        </div>
+        <a
+          href="appointment.html"
+          class="inline-flex items-center justify-center rounded-full bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400"
+          >Book Appointment</a
+        >
+      </header>
+
+      <main class="mt-10 space-y-16" id="home">
+        <section class="grid gap-10 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
+          <div class="space-y-6">
+            <p
+              class="inline-flex items-center rounded-full bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-200"
+            >
+              Trusted dental care in your neighborhood
+            </p>
+            <h1
+              class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
+            >
+              Healthy smile, confident life.
+            </h1>
+            <p class="max-w-xl text-slate-400">
+              Professional dental care for families, cosmetic treatments, and
+              urgent relief. Fast booking optimized for Bangladesh 4G and mobile
+              screens.
+            </p>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href="appointment.html"
+                class="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:bg-sky-400"
+                >Reserve slot</a
+              >
+              <button
+                type="button"
+                @click="openChat = true"
+                class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-500"
+              >
+                Chat FAQ
+              </button>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div
+                class="rounded-3xl bg-slate-900/80 p-5 ring-1 ring-slate-700/70"
+              >
+                <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                  Clinic
+                </p>
+                <p class="mt-3 text-lg font-semibold text-white">[ADDRESS]</p>
+              </div>
+              <div
+                class="rounded-3xl bg-slate-900/80 p-5 ring-1 ring-slate-700/70"
+              >
+                <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                  Call / WhatsApp
+                </p>
+                <p class="mt-3 text-lg font-semibold text-white">[PHONE]</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="relative overflow-hidden rounded-[2rem] bg-slate-900/80 p-6 shadow-2xl shadow-slate-950/40 ring-1 ring-slate-700/60"
+          >
+            <div
+              class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_40%)]"
+            ></div>
+            <div class="relative grid gap-5">
+              <div
+                class="rounded-3xl bg-slate-950/90 p-6 text-slate-100 ring-1 ring-slate-700/60"
+              >
+                <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                  Payment
+                </p>
+                <p class="mt-4 text-lg font-semibold">Send bKash to</p>
+                <p class="mt-2 text-3xl font-extrabold text-white">
+                  01XXXXXXXXX
+                </p>
+                <p class="mt-4 text-sm text-slate-400">
+                  After payment, fill the appointment form and use the payment
+                  reference in the message.
+                </p>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div
+                  class="rounded-3xl bg-slate-950/90 p-6 ring-1 ring-slate-700/60"
+                >
+                  <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                    Hours
+                  </p>
+                  <p class="mt-3 text-lg font-semibold text-white">Sat–Thu</p>
+                  <p class="text-slate-400">10:00 AM – 8:00 PM</p>
+                </div>
+                <div
+                  class="rounded-3xl bg-slate-950/90 p-6 ring-1 ring-slate-700/60"
+                >
+                  <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                    Emergency
+                  </p>
+                  <p class="mt-3 text-lg font-semibold text-white">
+                    +8801XXXXXXXXX
+                  </p>
+                  <p class="text-slate-400">WhatsApp for urgent advice</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="doctors-heading" class="space-y-6">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+                Doctors
+              </p>
+              <h2
+                id="doctors-heading"
+                class="mt-3 text-3xl font-bold text-white"
+              >
+                Experienced team you can trust
+              </h2>
+            </div>
+            <p class="hidden text-sm text-slate-400 md:block">
+              Modern dental care with empathy and precision.
+            </p>
+          </div>
+          <div class="grid gap-4 md:grid-cols-3">
+            <a
+              href="/doctors/dr-1.html"
+              class="group block rounded-[1.75rem] glass transition hover:-translate-y-1 hover:bg-slate-900/95"
+            >
+              <div
+                class="mb-5 h-56 overflow-hidden rounded-3xl bg-slate-950/90"
+              >
+                <div
+                  class="flex h-full items-center justify-center text-4xl text-sky-300"
+                >
+                  D1
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold text-white">Dr. [Name]</h3>
+                <p class="mt-2 text-slate-400">General & cosmetic dentistry</p>
+                <p class="mt-4 text-sm leading-6 text-slate-300">
+                  Delivering gentle care and confident smiles with modern tools
+                  and close follow-up.
+                </p>
+                <p
+                  class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition group-hover:text-sky-200"
+                >
+                  View profile →
+                </p>
+              </div>
+            </a>
+            <a
+              href="/doctors/dr-2.html"
+              class="group block rounded-[1.75rem] glass transition hover:-translate-y-1 hover:bg-slate-900/95"
+            >
+              <div
+                class="mb-5 h-56 overflow-hidden rounded-3xl bg-slate-950/90"
+              >
+                <div
+                  class="flex h-full items-center justify-center text-4xl text-sky-300"
+                >
+                  D2
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold text-white">Dr. [Name]</h3>
+                <p class="mt-2 text-slate-400">Root canal specialist</p>
+                <p class="mt-4 text-sm leading-6 text-slate-300">
+                  Precision endodontic treatments with comfort-focused care for
+                  long-lasting health.
+                </p>
+                <p
+                  class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition group-hover:text-sky-200"
+                >
+                  View profile →
+                </p>
+              </div>
+            </a>
+            <a
+              href="/doctors/dr-3.html"
+              class="group block rounded-[1.75rem] glass transition hover:-translate-y-1 hover:bg-slate-900/95"
+            >
+              <div
+                class="mb-5 h-56 overflow-hidden rounded-3xl bg-slate-950/90"
+              >
+                <div
+                  class="flex h-full items-center justify-center text-4xl text-sky-300"
+                >
+                  D3
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold text-white">Dr. [Name]</h3>
+                <p class="mt-2 text-slate-400">Orthodontics & clear aligners</p>
+                <p class="mt-4 text-sm leading-6 text-slate-300">
+                  Straightening smiles safely with the latest braces and aligner
+                  techniques.
+                </p>
+                <p
+                  class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition group-hover:text-sky-200"
+                >
+                  View profile →
+                </p>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section aria-labelledby="equipment-heading" class="space-y-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              Equipment
+            </p>
+            <h2
+              id="equipment-heading"
+              class="mt-3 text-3xl font-bold text-white"
+            >
+              Advanced technology for safer treatment
+            </h2>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">Digital X-Ray</h3>
+              <p class="mt-3 text-sm text-slate-300">
+                Clear imaging for faster diagnosis with lower radiation.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">Intraoral Camera</h3>
+              <p class="mt-3 text-sm text-slate-300">
+                Real-time mouth scans for transparent patient care and
+                education.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">Laser Dentistry</h3>
+              <p class="mt-3 text-sm text-slate-300">
+                Safer, less painful soft-tissue treatments and faster healing.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">3D CBCT Scanner</h3>
+              <p class="mt-3 text-sm text-slate-300">
+                Precise 3D scans for implants, surgery planning, and complex
+                cases.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">CAD/CAM System</h3>
+              <p class="mt-3 text-sm text-slate-300">
+                Same-day crowns and restorations with digital precision.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">
+                Advanced Sterilization
+              </h3>
+              <p class="mt-3 text-sm text-slate-300">
+                High-standard infection control with modern sterilizers.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="reviews" class="space-y-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              Review
+            </p>
+            <h2 class="mt-3 text-3xl font-bold text-white">
+              Patients trust our care
+            </h2>
+            <p class="max-w-2xl text-slate-400">
+              Real reviews will appear here once the clinic begins serving
+              patients. This section is ready for testimonials and patient
+              stories.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="glass rounded-[1.75rem] p-6">
+              <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                "Very gentle"
+              </p>
+              <p class="mt-3 text-slate-300">
+                The team made my first root canal visit comfortable and fast.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                "Clean clinic"
+              </p>
+              <p class="mt-3 text-slate-300">
+                The facility feels modern and the staff were very friendly.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                "Quick booking"
+              </p>
+              <p class="mt-3 text-slate-300">
+                Booking an appointment was simple and the dental team called to
+                confirm.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="news" class="space-y-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              News / Articles
+            </p>
+            <h2 class="mt-3 text-3xl font-bold text-white">
+              Latest clinic updates
+            </h2>
+            <p class="max-w-2xl text-slate-400">
+              This space will publish dental health tips, clinic announcements,
+              and useful patient articles.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <article class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-xl font-semibold text-white">
+                Healthy teeth in 2026
+              </h3>
+              <p class="mt-3 text-slate-300">
+                Learn simple daily habits for stronger teeth and fresher breath.
+              </p>
+            </article>
+            <article class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-xl font-semibold text-white">Why choose bKash</h3>
+              <p class="mt-3 text-slate-300">
+                Secure mobile payment for appointment bookings and treatment
+                confirmations.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="research" class="space-y-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              Research
+            </p>
+            <h2 class="mt-3 text-3xl font-bold text-white">
+              Evidence-based dental care
+            </h2>
+            <p class="max-w-2xl text-slate-400">
+              We believe in modern dentistry guided by strong clinical evidence,
+              comfort, and sterilization standards.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">
+                Modern infection control
+              </h3>
+              <p class="mt-3 text-slate-300">
+                Using sterilization routines and updated protocols keeps
+                patients safer.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <h3 class="text-lg font-semibold text-white">
+                Digital treatment planning
+              </h3>
+              <p class="mt-3 text-slate-300">
+                Our clinic is set up to use digital tools for precise and
+                predictable results.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" class="space-y-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">FAQ</p>
+            <h2 class="mt-3 text-3xl font-bold text-white">
+              Common questions answered
+            </h2>
+            <p class="max-w-2xl text-slate-400">
+              Have a question? Use the chat bubble or read these quick answers.
+            </p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="glass rounded-[1.75rem] p-6">
+              <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                Opening hours
+              </p>
+              <p class="mt-3 text-slate-300">Sat–Thu, 10:00 AM – 8:00 PM.</p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                bKash payment
+              </p>
+              <p class="mt-3 text-slate-300">
+                Send payment to 01XXXXXXXXX and add the reference to your
+                appointment note.
+              </p>
+            </div>
+            <div class="glass rounded-[1.75rem] p-6">
+              <p class="text-sm uppercase tracking-[0.2em] text-sky-300">
+                First visit
+              </p>
+              <p class="mt-3 text-slate-300">
+                Bring your medical history and any current dental concerns.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-8 lg:grid-cols-[.9fr_.6fr]">
+          <div
+            class="space-y-6 rounded-[2rem] bg-slate-900/90 p-8 ring-1 ring-slate-700/70"
+          >
+            <div>
+              <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+                Why choose us
+              </p>
+              <h2 class="mt-3 text-3xl font-bold text-white">
+                Comfort, trust and modern care.
+              </h2>
+            </div>
+            <ul class="space-y-4 text-slate-300">
+              <li class="flex gap-4">
+                <span
+                  class="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300"
+                  >✓</span
+                >Quick appointments built for mobile users.
+              </li>
+              <li class="flex gap-4">
+                <span
+                  class="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300"
+                  >✓</span
+                >Simple bKash payment instructions with manual confirmation.
+              </li>
+              <li class="flex gap-4">
+                <span
+                  class="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300"
+                  >✓</span
+                >Friendly care and modern equipment in a hygienic clinic.
+              </li>
+              <li class="flex gap-4">
+                <span
+                  class="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300"
+                  >✓</span
+                >Admin-ready appointment management later in the panel.
+              </li>
+            </ul>
+          </div>
+          <div class="glass rounded-[2rem] p-8">
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              FAQ chatbot
+            </p>
+            <p class="mt-4 text-lg font-semibold text-white">
+              Ask basic dental questions instantly.
+            </p>
+            <p class="mt-3 text-slate-400">
+              Click the floating bubble below and try questions like "What are
+              your hours?" or "How do I pay?"
+            </p>
+            <div
+              class="mt-6 rounded-3xl border border-slate-700/70 bg-slate-950/80 p-5"
+            >
+              <p class="text-sm uppercase tracking-[0.24em] text-slate-500">
+                Sample prompts
+              </p>
+              <div class="mt-4 flex flex-col gap-3">
+                <button
+                  @click="sendFaq('What are your hours?')"
+                  class="rounded-2xl bg-slate-800 px-4 py-3 text-left text-sm text-slate-100 transition hover:bg-slate-700"
+                >
+                  What are your opening hours?
+                </button>
+                <button
+                  @click="sendFaq('How do I pay?')"
+                  class="rounded-2xl bg-slate-800 px-4 py-3 text-left text-sm text-slate-100 transition hover:bg-slate-700"
+                >
+                  How can I pay by bKash?
+                </button>
+                <button
+                  @click="sendFaq('Do you do braces?')"
+                  class="rounded-2xl bg-slate-800 px-4 py-3 text-left text-sm text-slate-100 transition hover:bg-slate-700"
+                >
+                  Do you offer braces?
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="appointment" class="space-y-8">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              Appointment
+            </p>
+            <h2 class="mt-3 text-3xl font-bold text-white">
+              Book your visit today
+            </h2>
+            <p class="max-w-2xl text-slate-400">
+              Fill the form and our team will confirm the appointment. Include
+              your bKash reference if you already paid.
+            </p>
+          </div>
+          <form
+            @submit.prevent="submitAppointment"
+            class="grid gap-4 rounded-[2rem] bg-slate-900/90 p-6 ring-1 ring-slate-700/70"
+          >
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="space-y-2 text-sm text-slate-200">
+                <span>Name</span>
+                <input
+                  x-model="appointment.name"
+                  required
+                  class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+                  placeholder="Your full name"
+                />
+              </label>
+              <label class="space-y-2 text-sm text-slate-200">
+                <span>Phone</span>
+                <input
+                  x-model="appointment.phone"
+                  type="tel"
+                  required
+                  class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+                  placeholder="01XXXXXXXXX"
+                />
+              </label>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="space-y-2 text-sm text-slate-200">
+                <span>Preferred date</span>
+                <input
+                  x-model="appointment.date"
+                  type="date"
+                  required
+                  class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+                />
+              </label>
+              <label class="space-y-2 text-sm text-slate-200">
+                <span>Service</span>
+                <select
+                  x-model="appointment.service"
+                  class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+                >
+                  <option value="General Checkup">General Checkup</option>
+                  <option value="Cleaning">Cleaning</option>
+                  <option value="Root Canal">Root Canal</option>
+                  <option value="Braces / Aligners">Braces / Aligners</option>
+                  <option value="Cosmetic Treatment">Cosmetic Treatment</option>
+                </select>
+              </label>
+            </div>
+            <label class="space-y-2 text-sm text-slate-200">
+              <span>Message</span>
+              <textarea
+                x-model="appointment.message"
+                rows="4"
+                class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+                placeholder="Add your symptoms, bKash reference, or preferred time..."
+              ></textarea>
+            </label>
+            <div
+              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div
+                class="rounded-3xl bg-slate-950/80 p-4 text-sm text-slate-300"
+              >
+                <p class="font-semibold text-white">Manual payment</p>
+                <p>
+                  Send bKash to <strong>01XXXXXXXXX</strong> and mention the
+                  reference above.
+                </p>
+              </div>
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-sky-400"
+                x-text="appointmentLoading ? 'Sending...' : 'Submit Appointment'"
+              ></button>
+            </div>
+            <p
+              x-show="appointmentMessage"
+              x-text="appointmentMessage"
+              class="rounded-3xl bg-slate-800 px-4 py-3 text-sm text-slate-100"
+              x-bind:class="appointmentSuccess ? 'bg-emerald-500/15 text-emerald-200' : 'bg-rose-500/15 text-rose-200'"
+            ></p>
+          </form>
+        </section>
+
+        <section
+          aria-labelledby="contact-heading"
+          class="grid gap-8 lg:grid-cols-[.95fr_.65fr]"
+        >
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              Contact
+            </p>
+            <h2 id="contact-heading" class="mt-3 text-3xl font-bold text-white">
+              Visit or message us
+            </h2>
+            <p class="mt-4 max-w-2xl text-slate-400">
+              Convenient location, fast WhatsApp support, and friendly follow-up
+              on all appointment requests.
+            </p>
+          </div>
+          <div
+            class="space-y-4 rounded-[2rem] bg-slate-900/90 p-6 ring-1 ring-slate-700/70"
+          >
+            <div class="space-y-1">
+              <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+                Address
+              </p>
+              <p class="text-lg font-semibold text-white">[ADDRESS]</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+                Phone
+              </p>
+              <p class="text-lg font-semibold text-white">[PHONE]</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+                Email
+              </p>
+              <p class="text-lg font-semibold text-white">clinic@email.com</p>
+            </div>
+            <a
+              href="https://wa.me/8801XXXXXXXXX"
+              target="_blank"
+              rel="noreferrer"
+              class="inline-flex items-center justify-center rounded-full bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400"
+              >Chat on WhatsApp</a
+            >
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer
+      class="fixed inset-x-0 bottom-0 border-t border-slate-800 bg-slate-950/90 py-4 backdrop-blur-xl"
+    >
+      <div
+        class="mx-auto flex max-w-6xl items-center justify-between px-4 text-xs text-slate-500 sm:px-6"
+      >
+        <p>© 2026 Dentopia. Mobile-first design for Bangladesh.</p>
+        <a
+          href="/admin.html"
+          class="font-semibold text-sky-300 hover:text-sky-200"
+          >Admin Panel</a
+        >
+      </div>
+    </footer>
+
+    <button
+      @click="openChat = true"
+      class="floating-btn fixed bottom-28 right-4 z-30 inline-flex h-14 w-14 items-center justify-center rounded-full bg-sky-500 text-white shadow-xl transition hover:bg-sky-400 sm:right-6"
+    >
+      <span class="text-2xl">💬</span>
+    </button>
+    <a
+      href="https://wa.me/8801XXXXXXXXX"
+      target="_blank"
+      rel="noreferrer"
+      class="floating-btn fixed bottom-4 right-4 z-30 inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-xl transition hover:bg-emerald-400 sm:right-6"
+    >
+      <span class="text-2xl">🟢</span>
+    </a>
+
+    <div
+      x-show="openChat"
+      x-cloak
+      class="fixed inset-0 z-40 flex items-end justify-center bg-slate-950/70 px-4 pb-6 sm:items-center sm:px-6"
+    >
+      <div
+        @click.away="openChat = false"
+        class="w-full max-w-md rounded-[2rem] bg-slate-900 p-6 shadow-2xl ring-1 ring-slate-700/70"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-sm uppercase tracking-[0.24em] text-sky-300">
+              Smart FAQ
+            </p>
+            <h3 class="text-xl font-semibold text-white">Dental help</h3>
+          </div>
+          <button
+            @click="openChat = false"
+            class="rounded-full border border-slate-700 px-3 py-2 text-sm text-slate-300 hover:bg-slate-800"
+          >
+            Close
+          </button>
+        </div>
+        <div class="mt-6 space-y-4">
+          <template x-for="message in chatLog" :key="message.id">
+            <div
+              :class="message.role === 'user' ? 'self-end rounded-3xl bg-slate-800 px-4 py-3 text-sm text-slate-100' : 'rounded-3xl bg-slate-700/90 px-4 py-3 text-sm text-slate-100'"
+            >
+              <p x-text="message.text"></p>
+            </div>
+          </template>
+        </div>
+        <form @submit.prevent="handleChatSubmit" class="mt-5 flex gap-3">
+          <input
+            x-model="chatInput"
+            placeholder="Ask about cost, hours, services..."
+            class="min-w-0 flex-1 rounded-full border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-white outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+          />
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center rounded-full bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400"
+          >
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function clinicApp() {
+        const supabaseUrl = "https://YOUR_SUPABASE_PROJECT_REF.supabase.co";
+        const supabaseKey = "YOUR_SUPABASE_ANON_KEY";
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        return {
+          openChat: false,
+          chatInput: "",
+          chatLog: [
+            {
+              id: 1,
+              role: "assistant",
+              text: "Hi! Ask me about hours, services, payment, or appointment steps.",
+            },
+          ],
+          menuOpen: false,
+          appointmentLoading: false,
+          appointmentMessage: "",
+          appointmentSuccess: false,
+          appointment: {
+            name: "",
+            phone: "",
+            date: "",
+            service: "General Checkup",
+            message: "",
+          },
+          faqAnswers: [
+            {
+              pattern: /hours|open|opening/i,
+              answer:
+                "We are open Sat–Thu, 10:00 AM to 8:00 PM. Please book a slot in the appointment form.",
+            },
+            {
+              pattern: /bkash|pay|payment/i,
+              answer:
+                "Send payment to bKash 01XXXXXXXXX, then include the reference in your appointment message.",
+            },
+            {
+              pattern: /brace|aligner|orthodont/i,
+              answer:
+                "We offer braces and clear aligners. Book a consultation to discuss the best option for your smile.",
+            },
+            {
+              pattern: /cost|price|fee/i,
+              answer:
+                "Prices vary by service. Send your preferred treatment and we will send a quick estimate by WhatsApp.",
+            },
+            {
+              pattern: /emergency|pain|ache/i,
+              answer:
+                "If you have pain, please WhatsApp us immediately and book the earliest available appointment.",
+            },
+          ],
+          submitAppointment() {
+            this.appointmentLoading = true;
+            this.appointmentMessage = "";
+            const payload = {
+              name: this.appointment.name,
+              phone: this.appointment.phone,
+              preferred_date: this.appointment.date,
+              service: this.appointment.service,
+              message: this.appointment.message,
+              payment_status: "pending",
+              appointment_status: "pending",
+              created_at: new Date().toISOString(),
+            };
+
+            supabase
+              .from("appointments")
+              .insert([payload])
+              .then(({ error }) => {
+                this.appointmentLoading = false;
+                if (error) {
+                  this.appointmentSuccess = false;
+                  this.appointmentMessage =
+                    "Could not save appointment. Please try again later or WhatsApp us.";
+                  console.error(error);
+                  return;
+                }
+                this.appointmentSuccess = true;
+                this.appointmentMessage =
+                  "Appointment request sent. We will confirm it by WhatsApp soon.";
+                this.appointment = {
+                  name: "",
+                  phone: "",
+                  date: "",
+                  service: "General Checkup",
+                  message: "",
+                };
+              });
+          },
+          handleChatSubmit() {
+            const question = this.chatInput.trim();
+            if (!question) return;
+            this.chatLog.push({
+              id: Date.now() + "-user",
+              role: "user",
+              text: question,
+            });
+            const match = this.faqAnswers.find((item) =>
+              item.pattern.test(question),
+            );
+            const answer = match
+              ? match.answer
+              : "Please call or WhatsApp us for more details. We are happy to help directly.";
+            this.chatLog.push({
+              id: Date.now() + "-assistant",
+              role: "assistant",
+              text: answer,
+            });
+            this.chatInput = "";
+            this.$nextTick(() => {
+              const chatPanel = document.querySelector("[x-show]");
+              if (chatPanel) chatPanel.scrollTop = chatPanel.scrollHeight;
+            });
+          },
+          sendFaq(text) {
+            this.chatInput = text;
+            this.handleChatSubmit();
+            this.openChat = true;
+          },
+        };
+      }
+    </script>
   </body>
 </html>
